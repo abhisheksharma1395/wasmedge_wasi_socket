@@ -1,3 +1,3 @@
 FROM scratch
-COPY http_server_noop.wasm .
-ENTRYPOINT [ "http_server_noop.wasm" ]
+COPY http_server_index.wasm .
+ENTRYPOINT [ "http_server_index.wasm" ]
