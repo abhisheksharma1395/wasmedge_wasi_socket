@@ -8,6 +8,7 @@ fn handle_http(req: Request<String>) -> bytecodec::Result<Response<String>> {
         HttpVersion::V1_0,
         StatusCode::new(200)?,
         ReasonPhrase::new("")?,
+        format!(""),
     ))
 }
 
