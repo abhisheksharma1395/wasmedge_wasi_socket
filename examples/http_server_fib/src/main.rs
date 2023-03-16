@@ -14,9 +14,15 @@ fn fibonacci(n: u32) -> u32 {
 }
 
 fn get_integer(req: Request<String>) -> u32 {
-    let body_string = req.body().to_string();
-    let body_integer = body_string.trim().parse::<u32>()?;
-    return body_integer;
+    let body_str = req.body().to_string();
+    let n: u32 = match body_str.trim().parse::<u32>() {
+        Ok(n) => n,
+        Err(_) => return Ok(Response::builder()
+            .status(StatusCode::BAD_REQUEST)
+            .body(Body::empty())
+            .unwrap()),
+    };
+    return n;
 }
 
 fn handle_http(req: Request<String>) -> bytecodec::Result<Response<String>> {
