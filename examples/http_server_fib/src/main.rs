@@ -17,10 +17,7 @@ fn get_integer(req: Request<String>) -> u32 {
     let body_str = req.body().to_string();
     let n: u32 = match body_str.trim().parse::<u32>() {
         Ok(n) => n,
-        Err(_) => return Ok(Response::builder()
-            .status(StatusCode::BAD_REQUEST)
-            .body(Body::empty())
-            .unwrap()),
+        Err(_) => return 0,
     };
     return n;
 }
@@ -74,7 +71,7 @@ fn handle_client(mut stream: TcpStream) -> std::io::Result<()> {
 }
 
 fn main() -> std::io::Result<()> {
-    let port = std::env::var("PORT").unwrap_or("1234".to_string());
+    let port = std::env::var("PORT").unwrap_or("1235".to_string());
     println!("new connection at {}", port);
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port), false)?;
     loop {
