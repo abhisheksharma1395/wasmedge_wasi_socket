@@ -13,12 +13,18 @@ fn fibonacci(n: u32) -> u32 {
     }
 }
 
+fn get_integer(req: Request<String>) -> u32 {
+    let body_string = req.body().to_string();
+    let body_integer = body_string.trim().parse::<u32>()?;
+    return body_integer;
+}
+
 fn handle_http(req: Request<String>) -> bytecodec::Result<Response<String>> {
     Ok(Response::new(
         HttpVersion::V1_0,
         StatusCode::new(200)?,
         ReasonPhrase::new("")?,
-        format!("{}", fibonacci(req.body().to_string().trim().parse::<u32>())),
+        format!("fib result: {}", fibonacci(get_integer(req))),
     ))
 }
 
