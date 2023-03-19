@@ -1,15 +1,17 @@
 use bytecodec::DecodeExt;
 use httpcodec::{HttpVersion, ReasonPhrase, Request, RequestDecoder, Response, StatusCode};
 use std::io::{Read, Write};
-use std::fs::read;
+use std::fs::read_to_string;
 use wasmedge_wasi_socket::{Shutdown, TcpListener, TcpStream};
+use std::thread;
+
 
 fn handle_http(req: Request<String>) -> bytecodec::Result<Response<String>> {
     Ok(Response::new(
         HttpVersion::V1_0,
         StatusCode::new(200)?,
         ReasonPhrase::new("")?,
-        format!(read("/index.html").expect("Should be able to read index.html")),
+        format!("HTTP/1.0 200 OK\r\n\r\n{}",read_to_string("index.html").unwrap()),
     ))
 }
 
@@ -53,10 +55,16 @@ fn handle_client(mut stream: TcpStream) -> std::io::Result<()> {
 }
 
 fn main() -> std::io::Result<()> {
-    let port = std::env::var("PORT").unwrap_or("1234".to_string());
-    println!("new connection at {}", port);
-    let listener = TcpListener::bind(format!("0.0.0.0:{}", port), false)?;
-    loop {
-        let _ = handle_client(listener.accept(false)?.0);
+    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+    println!("Listening on port {}", port);
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
+
+    for stream in listener.incoming() {
+        let stream = stream?;
+        thread::spawn(|| {
+            handle_client(stream);
+        });
     }
+
+    Ok(())
 }

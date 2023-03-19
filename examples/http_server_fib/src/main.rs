@@ -2,6 +2,8 @@ use bytecodec::DecodeExt;
 use httpcodec::{HttpVersion, ReasonPhrase, Request, RequestDecoder, Response, StatusCode};
 use std::io::{Read, Write};
 use wasmedge_wasi_socket::{Shutdown, TcpListener, TcpStream};
+use std::thread;
+
 
 fn fibonacci(n: u32) -> u32 {
     if n == 0 {
@@ -71,10 +73,16 @@ fn handle_client(mut stream: TcpStream) -> std::io::Result<()> {
 }
 
 fn main() -> std::io::Result<()> {
-    let port = std::env::var("PORT").unwrap_or("1234".to_string());
-    println!("new connection at {}", port);
-    let listener = TcpListener::bind(format!("0.0.0.0:{}", port), false)?;
-    loop {
-        let _ = handle_client(listener.accept(false)?.0);
+    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+    println!("Listening on port {}", port);
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
+
+    for stream in listener.incoming() {
+        let stream = stream?;
+        thread::spawn(|| {
+            handle_client(stream);
+        });
     }
+
+    Ok(())
 }
