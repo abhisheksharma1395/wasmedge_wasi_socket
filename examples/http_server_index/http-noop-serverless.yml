@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: wasm-http-noop
+  name: wasm-http-index
   namespace: default
 spec:
   template:
@@ -12,8 +12,8 @@ spec:
       runtimeClassName: crun
       timeoutSeconds: 1
       containers:
-      - name: http-server-noop
-        image: docker.io/adroitx/http-server-noop:latest
+      - name: http-server-index
+        image: docker.io/adroitx/http-server-index:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 1234

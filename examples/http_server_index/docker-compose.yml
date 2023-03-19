@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   server:
-    image: adroitx/http-server-noop:latest
+    image: adroitx/http-server-index:latest
     platform: wasi/wasm32
     runtime: io.containerd.wasmedge.v1
     ports:
