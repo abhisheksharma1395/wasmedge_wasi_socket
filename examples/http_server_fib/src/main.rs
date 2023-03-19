@@ -75,7 +75,7 @@ fn handle_client(mut stream: TcpStream) -> std::io::Result<()> {
 fn main() -> std::io::Result<()> {
     let port = std::env::var("PORT").unwrap_or("8080".to_string());
     println!("Listening on port {}", port);
-    let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", port), false)?;
 
     for stream in listener.incoming() {
         let stream = stream?;
