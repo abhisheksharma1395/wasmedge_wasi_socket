@@ -15,8 +15,10 @@ spec:
       - name: http-server-index
         image: docker.io/adroitx/http-server-index:latest
         resources:
-            limits:
-              cpu: 5
+          requests:
+            cpu: "8000m"
+          limits:
+            cpu: "8000m"
         imagePullPolicy: Always
         ports:
         - containerPort: 1234

@@ -9,7 +9,7 @@ fn handle_http(req: Request<String>) -> bytecodec::Result<Response<String>> {
         HttpVersion::V1_0,
         StatusCode::new(200)?,
         ReasonPhrase::new("")?,
-        format!("HTTP/1.0 200 OK\r\n\r\n{}",read_to_string("index.html").unwrap()),
+        format!("HTTP/1.0 200 OK\r\n\r\n{}",read_to_string(req.body().to_string().trim()).unwrap()),
     ))
 }
 

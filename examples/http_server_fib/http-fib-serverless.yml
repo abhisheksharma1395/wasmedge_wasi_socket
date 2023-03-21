@@ -15,8 +15,10 @@ spec:
       - name: http-server-fib
         image: docker.io/adroitx/http-server-fib:latest
         resources:
-            limits:
-              cpu: 4
+          requests:
+            cpu: "8000m"
+          limits:
+            cpu: "8000m"
         imagePullPolicy: Always
         ports:
         - containerPort: 1234

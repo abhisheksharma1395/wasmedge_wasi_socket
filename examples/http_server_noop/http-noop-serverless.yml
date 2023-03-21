@@ -15,8 +15,10 @@ spec:
       - name: http-server-noop
         image: docker.io/adroitx/http-server-noop:latest
         resources:
-            limits:
-              cpu: 3
+          requests:
+            cpu: "8000m"
+          limits:
+            cpu: "8000m"
         imagePullPolicy: Always
         ports:
         - containerPort: 1234
