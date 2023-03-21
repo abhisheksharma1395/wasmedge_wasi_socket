@@ -4,12 +4,22 @@ use std::io::{Read, Write};
 use std::fs::read_to_string;
 use wasmedge_wasi_socket::{Shutdown, TcpListener, TcpStream};
 
+fn get_file_name(req: Request<String>) -> String {
+    let body_str = req.body().to_string();
+    let file_name: String = match body_str.trim().parse::<String>() {
+        Ok(file_name) => file_name,
+        Err(_) => return 0,
+    };
+    println!("File Name {}", file_name);
+    return file_name;
+}
+
 fn handle_http(req: Request<String>) -> bytecodec::Result<Response<String>> {
     Ok(Response::new(
         HttpVersion::V1_0,
         StatusCode::new(200)?,
         ReasonPhrase::new("")?,
-        format!("HTTP/1.0 200 OK\r\n\r\n{}",read_to_string(req.body().to_string().trim()).unwrap()),
+        format!("HTTP/1.0 200 OK\r\n\r\n{}",read_to_string(get_file_name(req)).unwrap()),
     ))
 }
 
