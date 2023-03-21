@@ -8,7 +8,7 @@ fn get_file_name(req: Request<String>) -> String {
     let body_str = req.body().to_string();
     let file_name: String = match body_str.trim().parse::<String>() {
         Ok(file_name) => file_name,
-        Err(_) => return "",
+        Err(_) => return "".to_string(),
     };
     println!("File Name {}", file_name);
     return file_name;
